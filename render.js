@@ -43,6 +43,8 @@ var tankConfig = {
 	decel: 0.03
 }
 var keys = {};
+var mouseX = 0;
+var mouseY = 0;
 document.addEventListener("keydown", function (e) {
 	keys[e.key] = e.code;
 });
@@ -126,10 +128,13 @@ setInterval(function () {
 	for (var i = 0; i < fireFuncs.length; i ++) {
 		fireFuncs[i]();
 	}
+	tank.datum().r = -180 * (Math.atan2(mouseX - tank.datum().x, mouseY - tank.datum().y) / Math.PI);
 	updateCoords();
 }, 1);
 svg.on("mousemove", function () {
-	tank.datum().r = -180 * (Math.atan2(d3.mouse(this)[0] - tank.datum().x, d3.mouse(this)[1] - tank.datum().y) / Math.PI);
+	var mcs = d3.mouse(this);
+	mouseX = mcs[0];
+	mouseY = mcs[1];
 });
 function generateFireInterval (cb, wait) {
 	var lastTime = -Infinity;
