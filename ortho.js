@@ -2,7 +2,6 @@ var fixedRot = tank.insert("polygon", ".updateCoords>circle").attr("points", "10
 tank.append("rect").attr("fill", "#999999").attr("x", "-7").attr("y", "0").attr("width", "14").attr("height", "40").attr("stroke", "#525252").attr("stroke-width", "2");
 tank.append("circle").attr("fill", "#999999").attr("cx", "0").attr("cy", "0").attr("r", "12").attr("stroke", "#525252").attr("stroke-width", "2");
 var bulletLayer = svg.insert("g", "g.updateCoords");
-var bullets = [];
 var linear = d3.transition().ease(d3.easeLinear).duration(1000);
 preUpdate = function () {
 	fixedRot.datum({
@@ -12,22 +11,18 @@ preUpdate = function () {
 		sx: 1,
 		sy: 1
 	});
-	var shiftCount = 0;
-	for (var i = 0; i < bullets.length; i ++) {
-		if (Date.now() > bullets[i].datum().exp && bullets[i].classed("updateCoords")) {
-			bullets[i].classed("updateCoords", false).attr("opacity", "1").transition(linear).attr("transform", "translate(" + bullets[i].datum().x + " " + bullets[i].datum().y + ") rotate(0) scale(1.5 1.5)").attr("opacity", "0").on("end", function () {
+	bulletLayer.selectAll("circle").each(function (d) {
+		var self = d3.select(this);
+		if (Date.now() > d.exp && self.classed("updateCoords")) {
+			self.classed("updateCoords", false).attr("opacity", "1").transition(linear).attr("transform", "translate(" + d.x + " " + d.y + ") rotate(0) scale(1.5 1.5)").attr("opacity", "0").on("end", function () {
 				this.remove();
 			});
-			shiftCount ++;
 		}
-	}
-	for (var i = 0; i < shiftCount; i ++) {
-		bullets.shift();
-	}
-	for (var i = 0; i < bullets.length; i ++) {
-		bullets[i].datum().x += Math.cos(bullets[i].datum().d) * bullets[i].datum().bs;
-		bullets[i].datum().y += Math.sin(bullets[i].datum().d) * bullets[i].datum().bs;
-	}
+	});
+	bulletLayer.selectAll("circle.updateCoords").each(function (d) {
+		d.x += Math.cos(d.d) * d.bs;
+		d.y += Math.sin(d.d) * d.bs;
+	});
 };
 function makeBullet (r, d, bs, exp) {
 	var temp = d3.select(document.createElementNS("http://www.w3.org/2000/svg", "circle")).attr("fill", "#00c0e5").attr("cx", "0").attr("cy", "0").attr("r", r).attr("stroke", "#525252").attr("stroke-width", "2").classed("updateCoords", true).datum({
@@ -40,7 +35,6 @@ function makeBullet (r, d, bs, exp) {
 		bs: bs,
 		exp: Date.now() + exp
 	});
-	bullets.push(temp);
 	bulletLayer.node().appendChild(temp.node());
 	return temp;
 }
