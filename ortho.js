@@ -74,8 +74,8 @@ generateFireInterval(function (isTime) {
 }, 200);
 generateFireInterval(function (isTime) {
 	if (isTime && mouseState == 0) {
-		makeBullet(10, tank.datum().r * Math.PI / 180 + Math.PI / 2, 1, 1000);
+		makeBullet(6, tank.datum().r * Math.PI / 180 + Math.PI / 2, 2, 2000);
 		return true;
 	}
 	return false;
-}, 400);
+}, 200);
