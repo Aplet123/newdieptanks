@@ -20,7 +20,9 @@ var tank = svg.append("g").classed("updateCoords", true).datum({
 	sy: 1
 });
 tank.append("circle").attr("fill", "#00c0e5").attr("cx", "0").attr("cy", "0").attr("r", "30").attr("stroke", "#525252").attr("stroke-width", "2");
+function preUpdate () {}
 function updateCoords () {
+	preUpdate();
 	d3.selectAll(".updateCoords").attr("transform", function (d) {
 		return "translate(" + d.x + " " + d.y + ") rotate(" + d.r + ") scale(" + d.sx + " " + d.sy + ")";
 	});
@@ -51,6 +53,14 @@ var momentum = {
 	x: 0,
 	y: 0
 };
+var fireFuncs = [];
+var mouseState = -1;
+svg.on("mousedown", function (e) {
+	mouseState = d3.event.button;
+});
+d3.select("body").on("mouseup", function () {
+	mouseState = -1;
+});
 setInterval(function () {
 	var temp = {
 		x: 0,
@@ -99,6 +109,25 @@ setInterval(function () {
 	}
 	tank.datum().x += momentum.x;
 	tank.datum().y += momentum.y;
+	for (var i = 0; i < fireFuncs.length; i ++) {
+		fireFuncs[i]();
+	}
 	updateCoords();
 }, 1);
+svg.on("mousemove", function () {
+	tank.datum().r = -180 * (Math.atan2(d3.mouse(this)[0] - tank.datum().x, d3.mouse(this)[1] - tank.datum().y) / Math.PI);
+});
+function generateFireInterval (cb, wait) {
+	var lastTime = -Infinity;
+	function fireInterval () {
+		if (Date.now() - lastTime >= wait) {
+			lastTime = Date.now();
+			cb ();
+			return true;
+		}
+		return false;
+	}
+	fireFuncs.push(fireInterval);
+	return fireInterval;
+}
 updateCoords();
