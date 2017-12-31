@@ -1,7 +1,7 @@
 var width = innerWidth - 4;
 var height = innerHeight - 4;
 var gridlength = 20;
-var svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
+var svg = d3.select("body").append("svg").attr("width", width).attr("height", height).attr("xmlns", "http://www.w3.org/2000/svg");
 svg.append("rect").attr("x", "0").attr("y", "0").attr("width", "100%").attr("height", "100%").attr("fill", "#eeeeee");
 var defs = svg.append("defs");
 defs.append("filter").attr("id", "gridblur").append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "1");
@@ -109,6 +109,20 @@ setInterval(function () {
 	}
 	tank.datum().x += momentum.x;
 	tank.datum().y += momentum.y;
+	if (tank.datum().x < 0) {
+		tank.datum().x = 0;
+		momentum.x = 1;
+	} else if (tank.datum().x > width) {
+		tank.datum().x = width;
+		momentum.x = -1;
+	}
+	if (tank.datum().y < 0) {
+		tank.datum().y = 0;
+		momentum.y = 1;
+	} else if (tank.datum().y > height) {
+		tank.datum().y = height;
+		momentum.y = -1;
+	}
 	for (var i = 0; i < fireFuncs.length; i ++) {
 		fireFuncs[i]();
 	}
@@ -120,12 +134,15 @@ svg.on("mousemove", function () {
 function generateFireInterval (cb, wait) {
 	var lastTime = -Infinity;
 	function fireInterval () {
+		var arg = false;
 		if (Date.now() - lastTime >= wait) {
-			lastTime = Date.now();
-			cb ();
-			return true;
+			arg = true;
 		}
-		return false;
+		var ret = cb (arg);
+		if (ret) {
+			lastTime = Date.now();
+		}
+		return arg;
 	}
 	fireFuncs.push(fireInterval);
 	return fireInterval;
