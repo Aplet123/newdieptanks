@@ -7,7 +7,7 @@ var linear = d3.transition().ease(d3.easeLinear).duration(1000);
 var curR = 0;
 var curState = "launched";
 preUpdate = function () {
-	curR += 0.3;
+	curR += 0.6;
 	tank.datum().r = curR;
 	bulletLayer.selectAll("polygon.launched").each(function (d) {
 		var self = d3.select(this);
@@ -24,7 +24,7 @@ preUpdate = function () {
 	bulletLayer.selectAll("polygon.orbiting").each(function (d) {
 		d.x = Math.sin(d.r * Math.PI / 180) * 60 + mouseX;
 		d.y = - Math.cos(d.r * Math.PI / 180) * 60 + mouseY;
-		d.r += 0.3;
+		d.r += 0.6;
 	});
 	var selectArray = d3.selectAll("polygon.deploying")._groups[0];
 	for (var i = 0; i < selectArray.length; i ++) {
