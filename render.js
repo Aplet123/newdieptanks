@@ -19,7 +19,7 @@ var tank = svg.append("g").classed("updateCoords", true).datum({
 	sx: 1,
 	sy: 1
 });
-tank.append("circle").attr("fill", "#00c0e5").attr("cx", "0").attr("cy", "0").attr("r", "30").attr("stroke", "#525252").attr("stroke-width", "2");
+tank.append("circle").attr("fill", "#00c0e5").attr("cx", "0").attr("cy", "0").attr("r", "30").attr("stroke", "#525252").attr("stroke-width", "2").classed("tankBody", true);
 function preUpdate () {}
 function updateCoords () {
 	preUpdate();

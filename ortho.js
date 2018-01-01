@@ -1,4 +1,4 @@
-var fixedRot = tank.insert("polygon", ".updateCoords>circle").attr("points", "10,-10 50,-20 50,20 10,10 20,50 -20,50 -10,10 -50,20 -50,-20 -10,-10 -20,-50 20,-50").attr("fill", "#999999").attr("stroke", "#525252").attr("stroke-width", "2").classed("updateCoords", true);
+var fixedRot = tank.insert("polygon", ".tankBody").attr("points", "10,-10 50,-20 50,20 10,10 20,50 -20,50 -10,10 -50,20 -50,-20 -10,-10 -20,-50 20,-50").attr("fill", "#999999").attr("stroke", "#525252").attr("stroke-width", "2").classed("updateCoords", true);
 tank.append("rect").attr("fill", "#999999").attr("x", "-7").attr("y", "0").attr("width", "14").attr("height", "40").attr("stroke", "#525252").attr("stroke-width", "2");
 tank.append("circle").attr("fill", "#999999").attr("cx", "0").attr("cy", "0").attr("r", "12").attr("stroke", "#525252").attr("stroke-width", "2");
 var bulletLayer = svg.insert("g", "g.updateCoords");
@@ -38,11 +38,11 @@ function makeBullet (r, d, bs, exp) {
 	bulletLayer.node().appendChild(temp.node());
 	return temp;
 }
-var tankConfig = {
+tankConfig = {
 	accel: 0.05,
 	topSpeed: 3,
 	decel: 0.03
-}
+};
 generateFireInterval(function (isTime) {
 	if (isTime) {
 		var ret = false;
