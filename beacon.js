@@ -39,8 +39,8 @@ tankConfig = {
 };
 generateFireInterval(function (isTime) {
 	if (isTime && mouseState == 0) {
-		makeBullet(6, tank.datum().r * Math.PI / 180 + Math.PI / 2, 2, 2000);
+		makeBullet(6, tank.datum().r * Math.PI / 180 + Math.PI / 2, 1, 4000);
 		return true;
 	}
 	return false;
-}, 200);
+}, 500);
